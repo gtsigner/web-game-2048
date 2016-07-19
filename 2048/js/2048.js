@@ -53,22 +53,35 @@ function initGameBox() {
 function getGameItemBox(row, col) {
     return $(".game-box #box-" + row + "-" + col);
 }
-/*检查游戏是否结束了*/
-function checkGameOver() {
-    var gameOverTag = true;
+
+/**
+ * 检查是否有空格子
+ * @returns {boolean}
+ */
+function checkHaveSpaceBox() {
+    var checkTag = false;
     for (var row = 0; row < 4; row++) {
         for (var col = 0; col < 4; col++) {
             //如果其中有一个接点的值不为0了的话那么游戏就结束了
-            if (gameScoreBoard[row][col] != 0) {
-                gameOverTag = false;
+            //1.是否有空的
+            if (gameScoreBoard[row][col] == 0) {
+                checkTag = true;
             }
         }
     }
-    if (gameOverTag) {
+    return checkTag;
+}
+
+/*检查游戏是否结束了*/
+function checkGameOver() {
+    //1.有空
+    //2.是否可以继续移动
+    if (checkCanMove(MOVE_RIGHT) == false && checkCanMove(MOVE_LEFT) == false && checkCanMove(MOVE_DOWN) == false && checkCanMove(MOVE_TOP) == false && checkHaveSpaceBox() == false) {
         isGameOver = true;
     }
-    return gameOverTag;
+    return isGameOver;
 }
+
 /*移动  left*/
 function moveGameBoxLeft() {
     if (checkCanMove(MOVE_LEFT) != true) {
@@ -99,7 +112,6 @@ function moveGameBoxLeft() {
         }
     }
 }
-
 //下 Ok
 function moveGameBoxDown() {
     if (checkCanMove(MOVE_DOWN) != true) {
@@ -128,8 +140,6 @@ function moveGameBoxDown() {
         }
     }
 }
-
-
 //上 OK
 function moveGameBoxTop() {
     if (checkCanMove(MOVE_TOP) != true) {
@@ -187,21 +197,98 @@ function moveGameBoxRight() {
     }
 }
 
+/**
+ * 检测是否可以移动
+ * @param direction
+ * @returns {boolean}
+ */
 function checkCanMove(direction) {
     switch (direction) {
-        case MOVE_TOP:
+        case MOVE_LEFT:
+            for (var row = 0; row < 4; row++) {
+                for (var col = 1; col < 4; col++) {
+                    //判断是否有数字
+                    if (gameScoreBoard[row][col] != 0) {
+                        //判断可移动位置
+                        for (var mC = col - 1; mC >= 0; mC--) {
+                            //移动的目标地址是不是空
+                            if (gameScoreBoard[row][mC] == 0) {
+                                return true;
+                            }
+                            //2个盒子相同的情况
+                            if (gameScoreBoard[row][mC] == gameScoreBoard[row][mC + 1]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             break;
         case MOVE_DOWN:
+            for (var col = 0; col < 4; col++) {
+                for (var row = 2; row >= 0; row--) {
+                    //判断是否有数字
+                    if (gameScoreBoard[row][col] != 0) {
+                        //判断可移动位置
+                        for (var mC = row + 1; mC < 4; mC++) {
+                            //移动的目标是不是空
+                            if (gameScoreBoard[mC][col] == 0) {
+                                return true;
+                            }
+                            //2个盒子相同的情况
+                            if (gameScoreBoard[mC - 1][col] == gameScoreBoard[mC][col]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             break;
-        case MOVE_LEFT:
+        case MOVE_TOP:
+            for (var col = 0; col < 4; col++) {
+                for (var row = 1; row < 4; row++) {
+                    //判断是否有数字
+                    if (gameScoreBoard[row][col] != 0) {
+                        //判断可移动位置
+                        for (var mC = row - 1; mC >= 0; mC--) {
+                            //移动的目标是不是空
+                            if (gameScoreBoard[mC][col] == 0) {
+                                return true;
+                            }
+                            //2个盒子相同的情况
+                            if (gameScoreBoard[mC][col] == gameScoreBoard[mC + 1][col]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             break;
         case MOVE_RIGHT:
+            for (var row = 0; row < 4; row++) {
+                for (var col = 2; col >= 0; col--) {
+                    //判断是否有数字
+                    if (gameScoreBoard[row][col] != 0) {
+                        //判断可移动位置
+                        for (var mC = col + 1; mC <= 3; mC++) {
+                            //移动的目标是不是空
+                            if (gameScoreBoard[row][mC] == 0) {
+                                return true;
+                            }
+                            //2个盒子相同的情况
+                            if (gameScoreBoard[row][mC] == gameScoreBoard[row][mC - 1]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             break;
         default:
-            throw('system error');
+            //throw('system error');
             break;
     }
-    return true;
+    return false;
 
 }
 
@@ -217,12 +304,12 @@ $(function () {
                 break;
             case 38:
                 event.preventDefault();
-                moveGameBoxTop()
+                moveGameBoxTop();
                 break;
             //you
             case 39:
                 event.preventDefault();
-                moveGameBoxRight()
+                moveGameBoxRight();
                 break;
             case 40:
                 event.preventDefault();
@@ -236,9 +323,11 @@ $(function () {
         updateUserScore();
         if (checkGameOver() == true) {
             alert("Game Over !!");
-            //window.location.reload();
+            return false;
         } else {
-            createRandBoxNumber();
+            if (checkHaveSpaceBox() == true) {
+                createRandBoxNumber();
+            }
         }
         console.log(gameScoreBoard);
 
