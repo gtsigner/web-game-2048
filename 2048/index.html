@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2048游戏在线-Js+html+css</title>
+    <script src="./lib/jquery.min.js"></script>
+    <script src="./js/2048.js"></script>
+    <script src="./js/gameLib/action.js"></script>
+    <script src="./js/gameLib/support.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/2048.css">
+</head>
+<body>
+
+<div class="game">
+    <div class="header">
+        <h1>2048 WebGame</h1>
+        <h4>Author：<a target="_blank" href="http://github.com/zhaojunlike/">http://github.com/zhaojunlike/</a></h4>
+        <h4>Complete by: <a href="" target="_blank">PHP</a>+Js+<a href="" target="_blank">Jquery</a></h4>
+        <a class="btn btn-game btn-start" href="javascript:startGame();">Start</a>
+        <h4>Score：<span id="gameScore">0</span></h4>
+    </div>
+    <div class="main">
+        <!--游戏基础背景-->
+        <div class="game-box">
+            <div class="row">
+                <div id="box-0-0" class="box-item">
+                </div>
+                <div id="box-0-1" class="box-item"></div>
+                <div id="box-0-2" class="box-item"></div>
+                <div id="box-0-3" class="box-item"></div>
+            </div>
+            <div class="row">
+                <div id="box-1-0" class="box-item"></div>
+                <div id="box-1-1" class="box-item"></div>
+                <div id="box-1-2" class="box-item"></div>
+                <div id="box-1-3" class="box-item"></div>
+            </div>
+            <div class="row">
+                <div id="box-2-0" class="box-item"></div>
+                <div id="box-2-1" class="box-item"></div>
+                <div id="box-2-2" class="box-item"></div>
+                <div id="box-2-3" class="box-item"></div>
+            </div>
+            <div class="row">
+                <div id="box-3-0" class="box-item"></div>
+                <div id="box-3-1" class="box-item"></div>
+                <div id="box-3-2" class="box-item"></div>
+                <div id="box-3-3" class="box-item"></div>
+            </div>
+        </div>
+        <!--存放盒子-->
+        <div class="game-box-house"></div>
+    </div>
+
+    <div class="footer">
+        <div class="head">
+            <h3>Top 10</h3>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function startGame() {
+        newGame();
+    }
+</script>
+</body>
+</html>

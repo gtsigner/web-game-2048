@@ -1,0 +1,76 @@
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #bdbdc3;
+    background: #bdbdc3;
+    color: #fff;
+}
+
+a {
+    text-decoration: none;
+}
+
+.game {
+
+}
+
+.game .header {
+    text-align: center;
+}
+
+.game .btn.btn-start {
+    /*background: url("") repeat;*/
+    transition: .2s;
+}
+
+.game .btn.btn-start:hover {
+    background: #ffbe39;
+}
+
+.game .main {
+    text-align: center;
+}
+
+/*游戏主盒子*/
+.game .main .game-box {
+    text-align: center;
+    background: #8f7a66;
+    padding: 10px;
+    display: inline-block;
+    font-family: Arial;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.game .main .game-box .row {
+    display: block;
+}
+
+/*数字盒子*/
+.game .main .game-box .box-item {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    border-radius: 5px;
+    background: #ccc0b3;
+    text-align: center;
+}
+
+.game .main .game-box .box-item span {
+    vertical-align: middle;
+    text-align: center;
+    width: 100px;
+    padding: 0px;
+    overflow: hidden;
+    font-size: 50px;
+    height: 100px;
+    line-height: 100px;
+    background: #ccc0b3;
+    border-radius: 5px;
+    display: table;
+}
+
+.footer {
+    text-align: center;
+}
