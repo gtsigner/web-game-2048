@@ -81,12 +81,8 @@ function checkGameOver() {
     }
     return isGameOver;
 }
-
 /*移动  left*/
 function moveGameBoxLeft() {
-    if (checkCanMove(MOVE_LEFT) != true) {
-        return false;
-    }
     for (var row = 0; row < 4; row++) {
         for (var col = 1; col < 4; col++) {
             //判断是否有数字
@@ -114,9 +110,6 @@ function moveGameBoxLeft() {
 }
 //下 Ok
 function moveGameBoxDown() {
-    if (checkCanMove(MOVE_DOWN) != true) {
-        return false;
-    }
     for (var col = 0; col < 4; col++) {
         for (var row = 2; row >= 0; row--) {
             //判断是否有数字
@@ -142,9 +135,6 @@ function moveGameBoxDown() {
 }
 //上 OK
 function moveGameBoxTop() {
-    if (checkCanMove(MOVE_TOP) != true) {
-        return false;
-    }
     for (var col = 0; col < 4; col++) {
         for (var row = 1; row < 4; row++) {
             //判断是否有数字
@@ -170,9 +160,6 @@ function moveGameBoxTop() {
 }
 //right ok
 function moveGameBoxRight() {
-    if (checkCanMove(MOVE_RIGHT) != true) {
-        return false;
-    }
     for (var row = 0; row < 4; row++) {
         for (var col = 2; col >= 0; col--) {
             //判断是否有数字
@@ -285,12 +272,14 @@ function checkCanMove(direction) {
             }
             break;
         default:
-            //throw('system error');
+            throw('system error');
             break;
     }
     return false;
 
 }
+
+var startX, startY, endX, endY;
 
 $(function () {
     gameBoxHtml = $(".game-box").html();//获取初始的页面
@@ -322,51 +311,62 @@ $(function () {
         //没一次移动完成之后
         updateUserScore();
         if (checkGameOver() == true) {
-            alert("Game Over !!");
+            alert("游戏结束了，您获得了" + userScore + "分!!");
+            //TODO  排行榜
             return false;
         } else {
             if (checkHaveSpaceBox() == true) {
                 createRandBoxNumber();
             }
         }
-        console.log(gameScoreBoard);
-
     });
 
-    /*手机版touch*/
-    document.addEventListener("touchstart", function (e) {
-
+    document.addEventListener('touchstart', function (event) {
+        startX = event.touches[0].pageX;
+        startY = event.touches[0].pageY;
     });
-    document.addEventListener("touchmove", function (e) {
 
+    document.addEventListener('touchmove', function (event) {
+        event.preventDefault();
     });
-    document.addEventListener("touchend", function (e) {
 
-        var actionType = 1;
-        switch (actionType) {
-            //左
-            case 37:
-                event.preventDefault();
+    document.addEventListener('touchend', function (event) {
+        endX = event.changedTouches[0].pageX;
+        endY = event.changedTouches[0].pageY;
+        var deltax = endX - startX;
+        var deltay = endY - startY;
+        var document_width;
+        if (Math.abs(deltax) < 0.3 * document_width && Math.abs(deltay) < 0.3 * document_width) {
+            return;
+        }
+        //x
+        if (Math.abs(deltax) >= Math.abs(deltay)) {
+            if (deltax > 0) {
+                //move right
+                moveGameBoxRight();
+            } else {
+                //move left
                 moveGameBoxLeft();
-                break;
-            //下
-            case 38:
-                event.preventDefault();
-                moveGameBoxDown()
-                break;
-            //you
-            case 39:
-                event.preventDefault();
-                moveGameBoxRight()
-                break;
-            //上
-            case 40:
-                event.preventDefault();
-                moveGameBoxTop()
-                break;
-            default:
-                return false;
-                break;
+            }
+        } else {	//y
+            if (deltay > 0) {
+                //move down
+                moveGameBoxDown();
+
+            } else {
+                //move up
+                moveGameBoxTop();
+            }
+        }
+
+        if (checkGameOver() == true) {
+            alert("游戏结束了，您获得了" + userScore + "分!!");
+            //TODO  排行榜
+            return false;
+        } else {
+            if (checkHaveSpaceBox() == true) {
+                createRandBoxNumber();
+            }
         }
     });
 
