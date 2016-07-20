@@ -358,6 +358,7 @@ $(function () {
                 moveGameBoxTop();
             }
         }
+        updateUserScore();
         if (checkGameOver() == true) {
             alert("游戏结束了，您获得了" + userScore + "分!!");
             //TODO  排行榜
